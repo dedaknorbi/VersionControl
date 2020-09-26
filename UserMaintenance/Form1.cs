@@ -24,6 +24,7 @@ namespace UserMaintenance
             label1.Text = Resource1.LastName; 
             button1.Text = Resource1.Add;
             button2.Text = Resource1.Write;
+            button3.Text = Resource1.Delete;
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -51,6 +52,12 @@ namespace UserMaintenance
                 writer.Dispose();
                 writer.Close();
             }
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            int x = Convert.ToInt32(listBox1.SelectedIndex);
+            users.RemoveAt(x);
         }
     }
 }
