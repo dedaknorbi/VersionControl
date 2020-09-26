@@ -29,8 +29,8 @@ namespace UserMaintenance
         {
             var u = new User()
             {
-                LastName = label1.Text,
-                FirstName = label2.Text
+                LastName = textBox1.Text,
+                FirstName = textBox2.Text
             };
             users.Add(u);
         }
