@@ -17,24 +17,27 @@ namespace MNB
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        //BindingList<string> Currencies = new BindingList<string>();
         public Form1()
         {
             InitializeComponent();
             dataGridView1.DataSource = Rates;
-            hivas();
-            XMLfeldolg();
-            diagram();
+            //comboBox1.DataSource = Currencies;
+            RefreshData();
         }
 
-        private void hivas()
+        private void RefreshData()
         {
+            
+            Rates.Clear();
+
             var mnbService = new MNBArfolyamServiceSoapClient();
 
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
+                currencyNames = Convert.ToString(comboBox1.SelectedItem),
+                startDate = Convert.ToString(dateTimePicker1.Value),
+                endDate = Convert.ToString(dateTimePicker2.Value)
             };
 
             // Ebben az esetben a "var" a GetExchangeRates visszatérési értékéből kapja a típusát.
@@ -44,14 +47,6 @@ namespace MNB
             // Ebben az esetben a "var" a GetExchangeRatesResult property alapján kapja a típusát.
             // Ezért a result változó valójában string típusú.
             var result = response.GetExchangeRatesResult;
-
-
-
-
-
-
-
-
             // XML document létrehozása és az aktuális XML szöveg betöltése
             var xml = new XmlDocument();
             xml.LoadXml(result);
@@ -78,12 +73,6 @@ namespace MNB
                 if (unit != 0)
                     rate.Value = value / unit;
 
-
-
-
-
-
-
                 chartRateData.DataSource = Rates;
 
                 var series = chartRateData.Series[0];
@@ -99,17 +88,22 @@ namespace MNB
                 chartArea.AxisX.MajorGrid.Enabled = false;
                 chartArea.AxisY.MajorGrid.Enabled = false;
                 chartArea.AxisY.IsStartedFromZero = false;
-
             }
         }
 
-        private void XMLfeldolg()
+        private void DateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            
+            RefreshData();
         }
-        private void diagram()
+
+        private void DateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
-            
+            RefreshData();
+        }
+
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }
